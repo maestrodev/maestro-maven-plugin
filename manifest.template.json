@@ -1,0 +1,47 @@
+{
+  "tasks": [{
+    "name": "ant",
+    "description": "Run An Ant Task",
+    "license": "Apache 2.0",
+    "author":  "MaestroDev",
+    "version": "updated at build time",
+    "class":   "MaestroDev::AntWorker",
+    "type":    "ruby",
+    "dependencies":[
+    ],
+    "task":{
+      "command": "/ant/execute",
+      "description": "Run A Specified Set Of Ant Tasks",
+      "name": "ant",
+      "inputs": {
+        "path": {
+          "description": "Location To Run Ant",
+          "required": false,
+          "type": "String",
+          "value": null
+        },
+        "tasks": {
+          "description": "Set Of Ant Tasks",
+          "required": true,
+          "type": "Array",
+          "value": []
+        },
+        "environment": {
+          "description": "Environment Variables",
+          "required": false,
+          "type": "String",
+          "value": ""
+        },
+        "propertyfile": {
+          "description": "Location Of The Ant Property File",
+          "required": false,
+          "type": "String",
+          "value": ""
+        }
+      },
+      "outputs": {"output" : {"type" : "String"}},
+      "tool_name": "Shell",
+      "icon": "ant.png"
+    }
+  }]
+}
