@@ -1,27 +1,27 @@
 {
   "tasks": [{
-    "name": "ant",
-    "description": "Run An Ant Task",
+    "name": "maven",
+    "description": "Run A Maven Task",
     "license": "Apache 2.0",
     "author":  "MaestroDev",
     "version": "updated at build time",
-    "class":   "MaestroDev::AntWorker",
+    "class":   "MaestroDev::MavenWorker",
     "type":    "ruby",
     "dependencies":[
     ],
     "task":{
-      "command": "/ant/execute",
-      "description": "Run A Specified Set Of Ant Tasks",
-      "name": "ant",
+      "command": "/maven/execute",
+      "description": "Run A Specified Set Of Maven Goals",
+      "name": "maven",
       "inputs": {
         "path": {
-          "description": "Location To Run Ant",
+          "description": "Location To Run Maven",
           "required": false,
           "type": "String",
           "value": null
         },
-        "tasks": {
-          "description": "Set Of Ant Tasks",
+        "goals": {
+          "description": "Set of Maven goals",
           "required": true,
           "type": "Array",
           "value": []
@@ -32,16 +32,28 @@
           "type": "String",
           "value": ""
         },
-        "propertyfile": {
-          "description": "Location Of The Ant Property File",
+        "settingsfile": {
+          "description": "Location of a Maven settings.xml file",
           "required": false,
           "type": "String",
           "value": ""
+        },
+        "profiles": {
+          "description": "Profiles To Activate",
+          "required": false,
+          "type": "Array",
+          "value": []
+        },
+        "properties": {
+          "description": "Settings To Pass Maven",
+          "required": false,
+          "type": "Array",
+          "value": []
         }
       },
       "outputs": {"output" : {"type" : "String"}},
       "tool_name": "Shell",
-      "icon": "ant.png"
+      "icon": "maven.png"
     }
   }]
 }
