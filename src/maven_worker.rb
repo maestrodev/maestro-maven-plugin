@@ -1,6 +1,6 @@
 # Copyright (c) 2013 MaestroDev.  All rights reserved.
 require 'maestro_plugin'
-require 'shell'
+require 'maestro_shell'
 
 module MaestroDev
   class ConfigError < StandardError
