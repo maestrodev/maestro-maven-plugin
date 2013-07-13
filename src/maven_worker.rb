@@ -30,7 +30,7 @@ module MaestroDev
         Maestro.log.warn("Error executing Maven Task: #{e.class} #{e}: " + e.backtrace.join("\n"))
       end
 
-      write_output "\n\nMAVEN task complete"
+      write_output "\n\nMAVEN task complete\n"
       set_error(@error) if @error
     end
 
@@ -65,6 +65,7 @@ module MaestroDev
       @profiles = get_field('profiles', '')
       @properties = get_field('properties', '')
       @environment = get_field('environment', '')
+      @env = @environment.empty? ? "" : "#{Maestro::Util::Shell::ENV_EXPORT_COMMAND} #{@environment.gsub(/(&&|[;&])\s*$/, '')} && "
 
       if valid_executable?
         if !@mvn_version.empty?
@@ -141,7 +142,7 @@ module MaestroDev
 
     def create_command
       settings = "--settings #{@settingsfile} " if !@settingsfile.empty?
-      shell_command = "#{@environment} cd #{@path} && #{@mvn_executable} -B #{settings}#{@goals}#{@profiles} #{@properties}"
+      shell_command = "#{@env}cd #{@path} && #{@mvn_executable} -B #{settings}#{@goals}#{@profiles} #{@properties}"
       set_field('command', shell_command)
       Maestro.log.debug("Running #{shell_command}")
       shell_command
