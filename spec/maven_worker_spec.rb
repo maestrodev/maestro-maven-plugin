@@ -112,7 +112,7 @@ describe MaestroDev::MavenWorker do
 
       subject.perform(:execute, @workitem)
 
-      expected = "M2_HOME=/tmp cd #{@path} && mvn -B --settings #{settingsfile} -version -Pmyprofile,-anotherprofile -Dx=y -Da=b"
+      expected = "export M2_HOME=/tmp && cd #{@path} && mvn -B --settings #{settingsfile} -version -Pmyprofile,-anotherprofile -Dx=y -Da=b"
       @workitem['fields']['command'].should eql(expected)
     end
 
@@ -121,7 +121,7 @@ describe MaestroDev::MavenWorker do
 
       subject.perform(:execute, @workitem)
 
-      expected = " cd #{@path} && mvn -B -version "
+      expected = "cd #{@path} && mvn -B -version "
       @workitem['fields']['command'].should eql(expected)
     end
 
@@ -136,7 +136,7 @@ describe MaestroDev::MavenWorker do
 
         subject.perform(:execute, @workitem)
 
-        expected = " cd #{@path} && mvn -B -version "
+        expected = "cd #{@path} && mvn -B -version "
         @workitem['fields']['command'].should eql(expected)
       end
     end
