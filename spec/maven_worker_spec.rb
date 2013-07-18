@@ -143,4 +143,133 @@ describe MaestroDev::MavenWorker do
 
   end
 
+  describe "wget_latest_snapshot()" do
+    @@user = 'user'
+    @@password = 'password'
+    @@archive_url = "127.0.0.1:18081/archiva/repository/snapshots/com/effectivemaven/centrepoint/webapp/1.0-SNAPSHOT/"
+
+    @@sample =<<-XML
+    <metadata>
+    <groupId>com.effectivemaven.centrepoint</groupId>
+    <artifactId>webapp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <versioning>
+    <snapshot>
+    <buildNumber>1</buildNumber>
+    <timestamp>20111005.232734</timestamp>
+    </snapshot>
+    <lastUpdated>20111005232751</lastUpdated>
+    </versioning>
+    </metadata>
+    XML
+    
+    @@bad_sample =<<-XML
+    <metadata>
+    <groupId>com.effectivemaven.centrepoint</groupId>
+    <artifactId>webapp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <versioning>
+    <snapshot>
+    </snapshot>
+    <lastUpdated>20111005232751</lastUpdated>
+    </versioning>
+    </metadata>
+    XML
+    
+    @@maven_metadata_xml = {"versioning"=>
+                              [{"snapshot"=>[{"buildNumber"=>["2"], "timestamp"=>["20111006.205136"]}],
+                                  "lastUpdated"=>["20111006205240"]}],
+                            "artifactId"=>["webapp"],
+                            "version"=>["1.0-SNAPSHOT"],
+                            "groupId"=>["com.effectivemaven.centrepoint"]}
+    @@maven_metadata_xml_release =<<XML
+<metadata>
+<groupId>com.maestrodev.lucee</groupId>
+<artifactId>lucee</artifactId>
+<version>0.0.15</version>
+</metadata>
+XML
+
+    it "should download the latest snapshot" do
+      workitem = {'fields' => { 'wget_executable' => 'echo Yo File Is Downloaded', 'username' => @@user,  'password' => @@password, 'path' => '/tmp/', 'packaging' => 'war', 'url' => "http://#{@@archive_url}"}}
+
+      stub_request(:get, "http://#{@@user}:#{@@password}@#{@@archive_url}/maven-metadata.xml").to_return(:body => @@sample)
+
+      subject.perform(:wget_latest_snapshot, workitem)
+
+      workitem['fields']['__error__'].should be_nil
+    end
+
+    it "should download the release" do
+      workitem = {'fields' => { 'wget_executable' => 'echo Yo File Is Downloaded', 'username' => @@user,  'password' => @@password, 'path' => '/tmp/', 'packaging' => 'war', 'url' => "http://#{@@archive_url}"}}
+
+      stub_request(:get, "http://#{@@user}:#{@@password}@#{@@archive_url}/maven-metadata.xml").to_return(:body => @@maven_metadata_xml_release)
+
+      subject.perform(:wget_latest_snapshot, workitem)
+
+      workitem['fields']['__error__'].should be_nil
+    end
+
+    it "should error if url is not specified" do
+      workitem = {'fields' => {'username' => 'name',  'password' => '********','path' => '/tmp/', 'packaging'=>'war'}}
+
+      subject.perform(:wget_latest_snapshot, workitem)
+
+      workitem['fields']['__error__'].should include("missing field url")
+    end
+
+    it "should error if packaging is not specified" do
+      workitem = {'fields' => {'username' => 'name',  'password' => '********','path' => '/tmp/', 'url'=>'hello'}}
+
+      subject.perform(:wget_latest_snapshot, workitem)
+
+      workitem['fields']['__error__'].should include("missing field packaging")
+    end
+
+    it "should error if path not specified" do
+      workitem = {'fields' => {'username' => 'name',  'password' => '********','url' => 'http://blah.com/', 'packaging'=>'war'}}
+
+      subject.perform(:wget_latest_snapshot, workitem)
+      
+      workitem['fields']['__error__'].should include("missing field path")
+    end
+
+    it "should error if path not found" do
+      workitem = {'fields' => {'username' => 'name',  'password' => '********','path' => '/tmp/please_dont_be_real', 'packaging'=>'war'}}
+      
+      subject.perform(:wget_latest_snapshot, workitem)
+
+      workitem['fields']['__error__'].should include("path not found '/tmp/please_dont_be_real'")
+    end
+
+    it "should error if unable to connect" do
+      workitem = {'fields' => {'wget_executable' => 'echo Yo File Is Downloaded', 'username' => @@user, 'password' => @@password, 'path' => '/tmp/', 'url' => "http://#{@@archive_url}", 'packaging'=>'war'}}
+
+      stub_request(:get, "http://#{@@user}:#{@@password}@#{@@archive_url}/maven-metadata.xml").to_timeout
+
+      subject.perform(:wget_latest_snapshot, workitem)
+      
+      workitem['fields']['__error__'].should include("Failed To Retrieve maven-metadata.xml")
+    end
+    
+    it "should error if maven-metadata.xml not found" do
+      workitem = {'fields' => {'wget_executable' => 'echo Yo File Is Downloaded', 'username' => @@user, 'password' => @@password, 'path' => '/tmp/', 'url' => "http://#{@@archive_url}", 'packaging'=>'war'}}
+      
+      subject.perform(:wget_latest_snapshot, workitem)
+      
+      workitem['fields']['__error__'].should include("Failed To Retrieve maven-metadata.xml")
+    end
+    
+    it "should error if get maven-metadata.xml works and package doesn't" do
+      workitem = {'fields' => {'wget_executable' => 'echo "if [ \"\$1\" == \"--version\" ]; then exit 0; else echo Fail && exit 1; fi" > /tmp/xyz; sh /tmp/xyz', 'username' => @@user, 'password' => @@password, 'path' => '/tmp/', 'url' => "http://#{@@archive_url}", 'packaging' => 'via ups'}}
+
+      stub_request(:get, "http://#{@@user}:#{@@password}@#{@@archive_url}/maven-metadata.xml").to_return(:body => @@maven_metadata_xml_release)
+
+      subject.perform(:wget_latest_snapshot, workitem)
+
+      workitem['fields']['__error__'].should include("Failed to download")
+    end
+    
+  end
+
 end

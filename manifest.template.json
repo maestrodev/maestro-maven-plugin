@@ -55,5 +55,56 @@
       "tool_name": "Shell",
       "icon": "maven.png"
     }
+  },
+  {
+    "name": "wget latest snapshot",
+    "description": "Downloads The Latest Snapshot From A Maven Artifact Repository Using Wget",
+    "license": "Apache 2.0",
+    "author":  "MaestroDev",
+    "version": "updated at build time",
+    "class":   "MaestroDev::MavenWorker",
+    "type":    "ruby",
+    "dependencies":[
+    ],
+    "task":{  
+      "command": "/maven/wget_latest_snapshot",
+      "description": "Downloads The Latest Snapshot From A Maven Artifact Repository Using Wget",
+      "name": "wget latest snapshot",
+      "inputs": {
+        "username": {
+          "description": "Repository Username",
+          "required": false,
+          "type": "String",
+          "value": null
+        },
+        "password": {
+          "description": "Repository Password",
+          "required": false,
+          "type": "Password",
+          "value": null
+        },
+        "path": {
+          "description": "Local Folder For File Download. File will be named $artifactId.$packaging",
+          "required": true,
+          "type": "String",
+          "value": "/tmp"
+        },
+        "packaging": {
+          "description": "Artifact Packaging Type",
+          "required": true,
+          "type": "String",
+          "value": "jar"
+        },
+        "url": {
+          "description": "Remote Repository Location Of The Project Containing The Artifact, ie. http://localhost/repository/com/acme/foo/1.0-SNAPSHOT/",
+          "required": true,
+          "type": "Url",
+          "value": "http://localhost/repository/com/acme/foo/1.0-SNAPSHOT/"
+        }
+      },
+      "type": "remote",
+      "tool_name": "Deploy",
+      "icon": "shell.png"
+    }
   }]
 }
