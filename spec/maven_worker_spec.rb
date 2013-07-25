@@ -17,7 +17,7 @@
 
 require 'spec_helper'
 
-describe MaestroDev::MavenWorker do
+describe MaestroDev::MavenPlugin::MavenWorker do
   MAVEN = 'Apache Maven'
   MAVEN_VERSION = 'Apache Maven 3.0.3'
   before(:all) do
