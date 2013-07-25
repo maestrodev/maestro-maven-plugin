@@ -102,6 +102,7 @@
           "value": "http://localhost/repository/com/acme/foo/1.0-SNAPSHOT/"
         }
       },
+      "outputs": {},
       "type": "remote",
       "tool_name": "Deploy",
       "icon": "shell.png"
