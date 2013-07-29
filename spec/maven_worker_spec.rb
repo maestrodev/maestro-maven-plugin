@@ -17,7 +17,7 @@
 
 require 'spec_helper'
 
-describe MaestroDev::MavenPlugin::MavenWorker do
+describe MaestroDev::Plugin::MavenWorker do
   MAVEN = 'Apache Maven'
   MAVEN_VERSION = 'Apache Maven 3.0.3'
   before(:all) do
@@ -70,8 +70,8 @@ describe MaestroDev::MavenPlugin::MavenWorker do
                                'propertyfile' => '/tmp/test.settings.xml'}}
 
       subject.perform(:execute, workitem)
-
-      workitem['fields']['__error__'].should include('[INFO] Scanning for projects...')
+      # It got as far as executing maven... we're all good
+      workitem['fields']['__error__'].should start_with("Maven failed executing goal list '[default]'\n[ERROR]")
     end
   end
 
@@ -248,7 +248,7 @@ XML
       stub_request(:get, "http://#{@@user}:#{@@password}@#{@@archive_url}/maven-metadata.xml").to_timeout
 
       subject.perform(:wget_latest_snapshot, workitem)
-      
+
       workitem['fields']['__error__'].should include("Failed To Retrieve maven-metadata.xml")
     end
     

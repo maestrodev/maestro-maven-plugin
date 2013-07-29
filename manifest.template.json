@@ -5,7 +5,7 @@
     "license": "Apache 2.0",
     "author":  "MaestroDev",
     "version": "updated at build time",
-    "class":   "MaestroDev::MavenPlugin::MavenWorker",
+    "class":   "MaestroDev::Plugin::MavenWorker",
     "type":    "ruby",
     "dependencies":[
     ],
@@ -62,7 +62,7 @@
     "license": "Apache 2.0",
     "author":  "MaestroDev",
     "version": "updated at build time",
-    "class":   "MaestroDev::MavenPlugin::MavenWorker",
+    "class":   "MaestroDev::Plugin::MavenWorker",
     "type":    "ruby",
     "dependencies":[
     ],
