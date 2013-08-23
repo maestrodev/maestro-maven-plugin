@@ -66,7 +66,7 @@ module MaestroDev
         write_output("\nDownloading File From #{url}", :buffer => true)
 
         wget = Maestro::Util::Shell.new
-        command = "#{@wget_executable} --progress=dot #{url} -O #{@path}/#{artifactId}.#{@packaging} --user=#{@username} --password=#{@password}"
+        command = "LANG=C #{@wget_executable} --progress=dot #{url} -O #{@path}/#{artifactId}.#{@packaging} --user=#{@username} --password=#{@password}"
         wget.create_script(command)
         write_output("\nRunning command:\n----------\n#{command.chomp}\n----------\n")
         exit_code = wget.run_script_with_delegate(self, :on_output)
