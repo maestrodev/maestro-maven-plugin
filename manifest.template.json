@@ -1,4 +1,5 @@
 {
+  "image": "maven.png",
   "tasks": [{
     "name": "maven",
     "description": "Run A Maven Task",
@@ -105,7 +106,7 @@
       "outputs": {},
       "type": "remote",
       "tool_name": "Deploy",
-      "icon": "shell.png"
+      "icon": "maven.png"
     }
   }]
 }
