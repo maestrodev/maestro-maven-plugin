@@ -1,5 +1,6 @@
 maestro-mavan-plugin
 ====================
+[![Code Climate](https://codeclimate.com/github/maestrodev/maestro-maven-plugin.png)](https://codeclimate.com/github/maestrodev/maestro-maven-plugin)
 
 A Maestro Plugin that provides integration with Maven
 
