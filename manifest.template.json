@@ -107,6 +107,17 @@
       "type": "remote",
       "tool_name": "Deploy",
       "icon": "maven.png"
-    }
+    },
+    "source_types": [
+      {
+        "name": "Maven download",
+        "options": {
+          "username": "String",
+          "password": "Password",
+          "path": "String",
+          "packaging": "String"
+        }
+      }
+    ]
   }]
 }
