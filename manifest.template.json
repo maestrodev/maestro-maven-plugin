@@ -115,7 +115,8 @@
           "username": "String",
           "password": "Password",
           "path": "String",
-          "packaging": "String"
+          "packaging": "String",
+          "url": "Url"
         }
       }
     ]
